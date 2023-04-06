@@ -32,7 +32,6 @@ def do_pack():
         return None
 
 
-
 def do_deploy(archive_path):
     """distributes an archive to your web servers"""
     if os.path.exists(archive_path) is False:
@@ -64,10 +63,11 @@ def do_deploy(archive_path):
            .format(output_filename)).failed:
         return False
 
+
 def deploy():
     """creates and distributes an archive to your web servers"""
     archive_path = do_pack()
-    
+
     if archive_path is None:
         return False
     else:
