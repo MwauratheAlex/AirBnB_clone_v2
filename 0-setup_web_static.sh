@@ -31,7 +31,7 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 chown -R ubuntu:ubuntu /data/
 
-NGINX_CONFIG="\\\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}\n"
+NGINX_CONFIG="\\\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t\tindex index.html index.htm;\n\t}\n"
 sed -i '/server_name _;/a'"$NGINX_CONFIG" /etc/nginx/sites-available/default
 
 service nginx restart
