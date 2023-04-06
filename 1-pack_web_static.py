@@ -6,12 +6,13 @@ import tarfile
 import os
 from datetime import datetime
 
+
 def do_pack:
     """generates a .tgz archive from the contents of the web_static folder
     of AirBnB Clone repo"""
     try:
         os.makedir("versions")
-    except:
+    except OSError:
         pass
 
     now = datetime.now().strftime("%Y%m%d%H%M%S")
