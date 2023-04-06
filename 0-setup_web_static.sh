@@ -31,7 +31,27 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 chown -R ubuntu:ubuntu /data/
 
-NGINX_CONFIG="\\\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t\tindex index.html index.htm;\n\t}\n"
-sed -i '/server_name _;/a'"$NGINX_CONFIG" /etc/nginx/sites-available/default
+echo '
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    add_header X-Served-By $HOSTNAME;
+    root   /var/www/html;
+    index  index.html index.htm;
+
+    location /hbnb_static {
+	alias /data/web_static/current;
+	index index.html index.htm;
+    }
+
+    rewrite ^/redirect_me https://www.mbumwa.com permanent;
+
+    error_page 404 /custom_404.html;
+    location = /custom_404.html {
+      root /var/www/html;
+      internal;
+    }
+}' > /etc/nginx/sites-available/default
+
 
 service nginx restart
