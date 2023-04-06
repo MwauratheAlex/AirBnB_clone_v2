@@ -35,9 +35,14 @@ echo "
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
+
     add_header X-Served-By $HOSTNAME;
+
     root   /var/www/html;
+
     index  index.html index.htm;
+
+    server_name _;
 
     location /hbnb_static {
 	alias /data/web_static/current;
