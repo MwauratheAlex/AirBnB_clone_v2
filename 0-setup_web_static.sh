@@ -31,7 +31,7 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 chown -R ubuntu:ubuntu /data/
 
-echo '
+echo "
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
@@ -51,7 +51,7 @@ server {
       root /var/www/html;
       internal;
     }
-}' > /etc/nginx/sites-available/default
+}" > /etc/nginx/sites-available/default
 
 
 service nginx restart
