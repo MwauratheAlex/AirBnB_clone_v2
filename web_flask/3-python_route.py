@@ -5,6 +5,7 @@ from flask import Flask
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
+
 @app.route("/")
 def index():
     """ Returns Hello HBNB! """
@@ -23,8 +24,9 @@ def c(text):
     return "C {}".format(text.replace("_", " "))
 
 
-@app.route("/python/(<text>)")
-def py(text="is cool"):
+@app.route("/python/", defaults={"text": "is cool"})
+@app.route("/python/<text>")
+def py(text):
     """ Returns python + <text> """
     return "Python {}".format(text.replace("_", " "))
 
