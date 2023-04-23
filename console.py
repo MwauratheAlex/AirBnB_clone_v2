@@ -125,6 +125,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[class_name]()
+
         for i in range(1, len(argv)):
             if '=' in argv[i]:
                 key, value = argv[i].split('=')
@@ -135,9 +136,11 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     value = int(value)
                 new_instance_id = class_name + '.' + new_instance.id
-                storage.all()[new_instance_id].__dict__.update({key: value})
-        print(new_instance.id)
+                #storage.all()[new_instance_id].__dict__.update({key: value})
+                setattr(new_instance, key, value)
+        storage.new(new_instance)
         storage.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
@@ -210,23 +213,45 @@ class HBNBCommand(cmd.Cmd):
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
 
-    def do_all(self, args):
+    def do_all(self, line):
         """ Shows all objects, or all objects of a class"""
-        print_list = []
+        #print_list = []
 
-        if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
-        else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
+        #if args:
+            #args = args.split(' ')[0]  # remove possible trailing args
+            #if args not in HBNBCommand.classes:
+                #print("** class doesn't exist **")
+                #return
+            #for k, v in storage._FileStorage__objects.items():
+                #if k.split('.')[0] == args:
+                    #print_list.append(str(v))
+        #else:
+            #for k, v in storage._FileStorage__objects.items():
+                #print_list.append(str(v))
 
-        print(print_list)
+        #print(print_list)
+        #if not args:
+         #   print(storage.all())
+        #else:
+         #   if str(args) in self.classes:
+          #      print(storage.all())
+           # else:
+            #    print("** class doesn't exist **")
+
+        #if not line:
+            #o = storage.all()
+            #print([o[k].__str__() for k in o])
+            #return
+        #try:
+            #args = line.split(" ")
+            #if args[0] not in self.classes:
+                #raise NameError()
+
+            #o = storage.all(eval(args[0]))
+            #print([o[k].__str__() for k in o])
+
+        #except NameError:
+            #print("** class doesn't exist **")
 
     def help_all(self):
         """ Help information for the all command """
