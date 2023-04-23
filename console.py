@@ -215,43 +215,21 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line):
         """ Shows all objects, or all objects of a class"""
-        #print_list = []
+        print_list = []
 
-        #if args:
-            #args = args.split(' ')[0]  # remove possible trailing args
-            #if args not in HBNBCommand.classes:
-                #print("** class doesn't exist **")
-                #return
-            #for k, v in storage._FileStorage__objects.items():
-                #if k.split('.')[0] == args:
-                    #print_list.append(str(v))
-        #else:
-            #for k, v in storage._FileStorage__objects.items():
-                #print_list.append(str(v))
+        if args:
+            args = args.split(' ')[0]  # remove possible trailing args
+            if args not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
+            for k, v in storage._FileStorage__objects.items():
+                if k.split('.')[0] == args:
+                    print_list.append(str(v))
+        else:
+            for k, v in storage._FileStorage__objects.items():
+                print_list.append(str(v))
 
-        #print(print_list)
-        #if not args:
-         #   print(storage.all())
-        #else:
-         #   if str(args) in self.classes:
-          #      print(storage.all())
-           # else:
-            #    print("** class doesn't exist **")
-
-        #if not line:
-            #o = storage.all()
-            #print([o[k].__str__() for k in o])
-            #return
-        #try:
-            #args = line.split(" ")
-            #if args[0] not in self.classes:
-                #raise NameError()
-
-            #o = storage.all(eval(args[0]))
-            #print([o[k].__str__() for k in o])
-
-        #except NameError:
-            #print("** class doesn't exist **")
+        print(print_list)
 
     def help_all(self):
         """ Help information for the all command """
