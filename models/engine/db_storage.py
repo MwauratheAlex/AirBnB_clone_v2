@@ -38,7 +38,7 @@ class DBStorage:
                     'State': State,
                     'City': City,
                     #'Amenity': Amenity,
-                    #'Review': Review
+                    'Review': Review
                   }
 
         if cls is not None:

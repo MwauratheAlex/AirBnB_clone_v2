@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
+import os
 from models.base_model import BaseModel
 from models.base_model import Base
 
@@ -25,3 +26,20 @@ class Place(BaseModel, Base):
 
     user = relationship("User", back_populates="places")
     cities = relationship("City", back_populates="places")
+
+    if os.getenv("HBNB_TYPE_STORAGE") == "db":
+        reviews = relationship("Review", back_populates="place", cascade="all, delete")
+    else:
+        @property
+        def reviews(self):
+            from models import storage
+            from models.review import Review
+
+            all_reviews = storage.all(Review)
+            place_reviews = []
+
+            for review in all_reviews:
+                if self.id == review.place_id:
+                    place_reviews.append(review)
+
+            return place_reviews
