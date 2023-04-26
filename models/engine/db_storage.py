@@ -33,7 +33,7 @@ class DBStorage:
         result_dict = {}
         classes = []
         class_mapping = {
-                    #'User': User,
+                    'User': User,
                     #'Place': Place,
                     'State': State,
                     'City': City,
