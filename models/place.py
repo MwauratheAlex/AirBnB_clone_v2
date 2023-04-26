@@ -1,11 +1,29 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 import os
+import models
 from models.base_model import BaseModel
+from models.amenity import Amenity
 from models.base_model import Base
 
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+
+
+place_amenity = Table("place_amenity", Base.metadata,
+                      Column(
+                          "place_id",
+                          String(60),
+                          ForeignKey("places.id"),
+                          primary_key=True,
+                          nullable=False),
+                      Column(
+                          "amenity_id",
+                          String(60),
+                          ForeignKey("amenities.id"),
+                          primary_key=True,
+                          nullable=False)
+)
 
 
 class Place(BaseModel, Base):
@@ -29,13 +47,11 @@ class Place(BaseModel, Base):
 
     if os.getenv("HBNB_TYPE_STORAGE") == "db":
         reviews = relationship("Review", back_populates="place", cascade="all, delete")
+        amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
     else:
         @property
         def reviews(self):
-            from models import storage
-            from models.review import Review
-
-            all_reviews = storage.all(Review)
+            all_reviews = models.storage.all(Review)
             place_reviews = []
 
             for review in all_reviews:
@@ -43,3 +59,19 @@ class Place(BaseModel, Base):
                     place_reviews.append(review)
 
             return place_reviews
+
+        @property
+        def amenities(self):
+            all_amenities = models.storage.all(Amenity)
+            place_amenities = []
+
+            for amenity in all_amenities:
+                if amenity.id in self.amenity_ids:
+                    place_amenities.append(amenity)
+
+            return place_amenities
+
+        @amenities.setter
+        def amenities(self, amenity):
+            if type(amenity) == Amenity:
+                self.amenity_ids.append(amenity.id)
