@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
+import os
 from models.base_model import Base
 from models.user import User
 from models.place import Place
@@ -14,17 +15,16 @@ class DBStorage:
     __session = None
 
     def __init__(self):
-        import os
         from sqlalchemy import create_engine
 
         self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".format(
-            os.environ["HBNB_MYSQL_USER"],
-            os.environ["HBNB_MYSQL_PWD"],
-            os.environ["HBNB_MYSQL_HOST"],
-            os.environ["HBNB_MYSQL_DB"]
+            os.getenv("HBNB_MYSQL_USER"),
+            os.getenv("HBNB_MYSQL_PWD"),
+            os.getenv("HBNB_MYSQL_HOST"),
+            os.getenv("HBNB_MYSQL_DB")
             ), pool_pre_ping=True)
 
-        if os.environ["HBNB_ENV"] == "test":
+        if os.getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
@@ -33,12 +33,12 @@ class DBStorage:
         result_dict = {}
         classes = []
         class_mapping = {
-                    'User': User,
-                    'Place': Place,
+                    #'User': User,
+                    #'Place': Place,
                     'State': State,
                     'City': City,
-                    'Amenity': Amenity,
-                    'Review': Review
+                    #'Amenity': Amenity,
+                    #'Review': Review
                   }
 
         if cls is not None:
@@ -48,6 +48,7 @@ class DBStorage:
             classes.extend(class_mapping.values())
 
         for cls in classes:
+            #print("*" * 5 + str(type(cls)) + "*"*5)
             objects = self.__session.query(cls).all()
             for obj in objects:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
