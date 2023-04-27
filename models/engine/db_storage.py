@@ -42,8 +42,7 @@ class DBStorage:
                   }
 
         if cls is not None:
-            if cls in class_mapping:
-                classes.append(class_mapping[cls])
+            classes.append(cls)
         else:
             classes.extend(class_mapping.values())
 
@@ -79,3 +78,7 @@ class DBStorage:
         session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        """ calls remove() method on the private session attribute """
+        self.__session.close()
