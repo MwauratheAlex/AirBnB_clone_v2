@@ -12,6 +12,10 @@ app.url_map.strict_slashes = False
 def states():
     """ renders states """
     states = sorted(storage.all(State).values(), key=lambda state: state.name)
+
+    if states[0] is None:
+        states = []
+
     return render_template("9-states.html", states=states)
 
 
