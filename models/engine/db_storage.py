@@ -9,6 +9,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class DBStorage:
     """This class manages storage of hbnb models in mysql database"""
     __engine = None
@@ -47,7 +48,6 @@ class DBStorage:
             classes.extend(class_mapping.values())
 
         for cls in classes:
-            #print("*" * 5 + str(type(cls)) + "*"*5)
             objects = self.__session.query(cls).all()
             for obj in objects:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
@@ -75,7 +75,8 @@ class DBStorage:
 
         Base.metadata.create_all(self.__engine)
 
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(
+                bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
 
