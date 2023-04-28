@@ -9,26 +9,14 @@ app.url_map.strict_slashes = False
 
 
 @app.route("/states")
-def states():
+@app.route("/states/<state_id>")
+def states(state_id=None):
     """ renders states """
-    states = sorted(storage.all(State).values(), key=lambda state: state.name)
+    states = storage.all(State)
+    if state_id is not None:
+        state_id = "State.{}".format(state_id)
 
-    if states[0] is None:
-        states = []
-
-    return render_template("9-states.html", states=states)
-
-
-@app.route("/states/<id>")
-def states_id(id):
-    """ renders a state and its cities """
-    state_id = "State.{}".format(id)
-    state = [storage.all(State).get(state_id)]
-
-    if state[0] is None:
-        state = []
-
-    return render_template("9-states.html", states=state)
+    return render_template("9-states.html", states=states, state_id=state_id)
 
 
 @app.teardown_appcontext
